@@ -9,6 +9,7 @@
     "docs:dev": "jsdoc -c ./conf.js -r"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^3.2.1",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "element-ui": "^2.13.1",

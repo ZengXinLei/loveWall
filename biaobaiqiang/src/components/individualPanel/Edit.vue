@@ -3,7 +3,24 @@
         <Navigationbar class="_head" :style="'top:'+headHeight+'px'"></Navigationbar>
 
         <div class="wall">
-            <div class="left" :style="'width:'+leftLength+'background:'+leftbackgound"></div>
+            <div class="left" :style="'width:'+leftLength+';background:'+leftbackgound">
+
+                <template  v-if="leftLength==='70%'">
+                    <div style="position: absolute;top:50%;transform: translateY(-50%);text-align: center;line-height: 50px">
+                        <p>我知道有一天</p>
+
+                        <p>他会在一个万众嘱目的情况下出现</p>
+
+                        <p>身披金甲圣衣</p>
+
+                        <p>脚踏七彩云来娶我</p>
+                        <el-button size="mini" type="success" @click="drawer=true">表白</el-button>
+
+                    </div>
+                </template>
+
+
+            </div>
             <div class="right" @click="changeStyle">
                 <div class="text">
                     <span>></span>
@@ -14,23 +31,54 @@
                 </div>
             </div>
         </div>
+        <el-drawer :visible.sync="drawer" direction="rtl" :with-header="false">
+            <el-container style="background:#717D7E;width:100%;height:100% ">
+                <el-header style="padding-left: 8px;border-bottom: white 1px solid">
+                    <h2 style="margin-top: 20px;text-align: left">爱就大胆说</h2>
+                </el-header >
+                <el-main style="padding-left: 8px;">
+                    <el-input placeholder="昵称(不填为匿名)"></el-input>
+                    <el-input placeholder="意中人" style="margin-top: 10px"></el-input>
+                    <div>
+                        <Editor id="edit" style="margin-top: 20px;width:100%;height: 400px" :init="editorInit">
+
+                    </Editor>
+                    </div>
+                </el-main>
+            </el-container>
+
+        </el-drawer>
     </div>
 </template>
 
 <script>
+    import tinymce from 'tinymce/tinymce'
+    import 'tinymce/themes/silver/theme'
+    import Editor from '@tinymce/tinymce-vue'
     import Navigationbar from "@/components/index/Navigationbar";
     export default {
         name: "Attention",
-        components: {Navigationbar},
+        components: {Navigationbar,Editor},
         data:function(){
             return{
                 headHeight:0,
                 leftLength:"20%",
-                leftbackgound:"white"
+                leftbackgound:"white",
+                drawer:true,
+                editorInit: {
+                    language_url: '/static/tinymce/zh_CN.js',
+                    language: 'zh_CN',
+                    skin_url: '/static/tinymce/skins/lightgray',
+                    height: 300
+                }
+
             }
         },
         mounted:function () {
             window.addEventListener("mousemove",this.mousemove)
+            tinymce.init({
+
+            })
             setTimeout(()=>{
                 this.headHeight=-90
             },1000)
@@ -73,7 +121,7 @@
     }
     .text>span{
         font-size: 30px;
-        transition: all .8s;
+        transition: all 2s;
         animation: toRight .8s infinite;
         opacity: 0.8;
     }
