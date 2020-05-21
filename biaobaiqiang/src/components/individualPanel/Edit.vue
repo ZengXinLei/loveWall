@@ -1,7 +1,19 @@
 <template>
     <div class="wrap">
         <Navigationbar class="_head" :style="'top:'+headHeight+'px'"></Navigationbar>
-        <div class="wall"></div>
+
+        <div class="wall">
+            <div class="left" :style="'width:'+leftLength+'background:'+leftbackgound"></div>
+            <div class="right" @click="changeStyle">
+                <div class="text">
+                    <span>></span>
+                    <h1>i3i4表白墙</h1>
+                    <br>
+                    <h4>小主，你的心声，我来倾听~</h4>
+                    <span>></span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -12,7 +24,9 @@
         components: {Navigationbar},
         data:function(){
             return{
-                headHeight:0
+                headHeight:0,
+                leftLength:"20%",
+                leftbackgound:"white"
             }
         },
         mounted:function () {
@@ -37,24 +51,70 @@
                         this.headHeight=-90
                     },500)
                 }
+            },
+            changeStyle:function () {
+                this.leftLength='70%'
+                this.leftbackgound="#E9EAF3"
             }
         }
     }
 </script>
 
 <style scoped>
-
-    .wall{
-        /*font-size: 62.5%;*/
-        /*box-sizing: border-box;*/
-        /*padding: 0;*/
-        /*margin: 0;*/
+    .text{
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
-        width: 20rem;
-        height: 30rem;
+        color: white;
+    }
+    .text>h1,.text>h4{
+        text-align: center;
+    }
+    .text>span{
+        font-size: 30px;
+        transition: all .8s;
+        animation: toRight .8s infinite;
+        opacity: 0.8;
+    }
+
+    @keyframes toRight {
+        0%{
+            margin-left: 0px;
+            opacity: 0.8;
+        }
+        100%{
+            margin-left: 50px;
+            opacity: 0.3;
+        }
+    }
+    .left{
+        z-index: 2;
+        position: absolute;
+        left: 0px;
+        /*width:20%;*/
+        height: 100%;
+        /*background: white;*/
+    }
+    .right{
+
+        position: absolute;
+        right: 0px;
+        width:80%;
+        height: 100%;
+        background: #C3244C;
+    }
+
+    .wall{
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        margin: auto;
+        width: 100%;
+        max-width: 300px;
+        height: 500px;
         box-shadow: 0 1rem 5rem rgba(0, 0, 0, 0.3);
     }
   .wrap{
