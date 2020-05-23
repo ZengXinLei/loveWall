@@ -44,8 +44,19 @@
         },
         methods:{
             changeColor:function () {
+                if(this.$cookies.get("user")===null){
+                    this.$notify.error("请先登录哦~")
+                    return
+                }
+
                 if(this.clickColor==="#30d268"){
                     //取消点赞
+                    this.clickColor===""
+                    this.article.aClick--
+                }else {
+                    //点赞
+                    this.clickColor==="#30d268"
+                    this.article.aClick++
                 }
             }
         },
