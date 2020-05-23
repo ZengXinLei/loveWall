@@ -7,18 +7,12 @@
             <p class="name">{{article.aName}}<span style="color: #EC407A">🌹</span><span>{{article.aToWho}}</span></p>
             <p class="time">{{new Date(article.aTime+ 8 * 3600 * 1000).toJSON().substr(0, 19).replace('T', ' ')}}</p>
             <div class="state">
-                <Icon class="up" type="md-thumbs-up" ></Icon>
+                <Icon class="up" type="md-thumbs-up" :style="'color:'+clickColor"></Icon>
                 <span>{{article.aClick}}</span>
                 <Icon class="comments" type="md-chatbubbles" ></Icon>
                 <span>{{article.aReview}}</span>
             </div>
-<!--            <el-row  type="flex" align="middle">-->
-<!--                <el-col :span="2" ><img class="head_portrait" src="https://qlogo2.store.qq.com/qzone/1599484837/1599484837/100?1571222671"></el-col>-->
-<!--                <el-col :span="22">-->
-<!--                    <el-row></el-row>-->
-<!--                    <el-row></el-row>-->
-<!--                </el-col>-->
-<!--            </el-row>-->
+
         </div>
     </div>
 </template>
@@ -30,15 +24,37 @@
             article:null,
 
         },
+        data:function(){
+          return{
+              clickColor:""
+          }
+        },
         mounted:function () {
 
-            console.log()
+            if(this.$cookies.get("user")===null)
+                return null
+            for (let i = 0; i < this.article.clicks.length; i++) {
+
+                let id=this.article.clicks[i]["cuserId"]
+                id=id*id+5*id+10000
+                if(id===this.$cookies.get("user").uId){
+                    this.clickColor="#30d268"
+                }
+            }
+        },
+        methods:{
+            changeColor:function () {
+                if(this.clickColor==="#30d268"){
+                    //取消点赞
+                }
+            }
         },
         computed:{
             color:function () {
 
                 return this.article.aName==='匿名'?'#5a5f69':'#5DADE2'
-            }
+            },
+
         }
     }
 </script>

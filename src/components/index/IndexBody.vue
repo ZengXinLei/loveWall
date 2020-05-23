@@ -34,9 +34,9 @@
                         offset:this.offset
                     })
             ).then((res)=> {
-                console.log("开始")
+                // console.log("开始")
                 for (let i = 0; i < res.data.length; i++) {
-                    console.log(i)
+                    // console.log(i)
                     this.articles.push(res.data[i])
                 }
                 this.start+=res.data.length
