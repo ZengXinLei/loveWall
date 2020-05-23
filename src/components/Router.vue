@@ -3,8 +3,8 @@
     import Profile from "@/components/individualPanel/Profile";
     import App from "@/components/index/App";
     import Login from "@/components/login/Login";
-    import Edit from "@/components/edit/Edit";
     import Index from "@/components/edit/Index";
+    import Article from "@/components/article/Article";
 
     const routes = [
         {
@@ -44,8 +44,8 @@
             }
         },
         {
-            path: "/test",
-            component: Edit,
+            path: "/article/*",
+            component: Article,
             meta: {
                 rule: 0
             }

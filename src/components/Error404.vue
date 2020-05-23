@@ -39,6 +39,7 @@
         font-weight: 500;
         line-height: 1.5;
         color: white;
+        width: 100%;
     }
 
     div {

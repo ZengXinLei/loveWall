@@ -1,6 +1,6 @@
 <template>
 
-    <div :class="article.aName==='匿名'?'nocard':'card'">
+    <div :class="article.aName==='匿名'?'nocard':'card'" @click="readArticle">
         <div class="content" :style="'background:'+color ">{{article.aText.length>=50?article.aText.split("").splice(0,50).join("")+"....":article.aText}}</div>
         <div class="information">
             <img class="head_portrait" :src="article.user.uHeadPortrait">
@@ -71,6 +71,9 @@
                     }
                 })
 
+            },
+            readArticle:function () {
+                this.$router.push("/article/"+this.article.aId)
             }
         },
         computed:{

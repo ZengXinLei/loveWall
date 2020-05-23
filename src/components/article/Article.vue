@@ -1,22 +1,187 @@
 <template>
-    <div class="wrap_content" >
+    <div style="width: 100%;">
+        <div v-if="canRead" class="wrap_content" >
+            <Navigationbar></Navigationbar>
+            <div class="n1">
+                <el-container>
+                    <el-header style="border-bottom: 1px solid rgb(227, 227, 227)">
+                        <img style="border-radius: 50%;max-width: 50px;margin-top: 5px;float: left"  :src="article['user']['uHeadPortrait']">
+                        <div style="float: left;margin: 10px">
+                            <h2 style="float: left;">🌹</h2>
+                            <h4 style="float: left;margin-top: 5px;margin-left: 10px">{{article["aToWho"]}}</h4>
+                            <h5 style="float: left;margin: 10px 20px;color: grey">{{time}}</h5>
+                        </div>
+                    </el-header>
+                    <el-main v-html="article['aHtml']" style="border-bottom: 1px solid rgb(227, 227, 227)">
+                    </el-main>
+                    <el-footer height="30px">
+                        <div class="state" style="margin-top: 5px;">
+                            <Icon class="up" type="md-thumbs-up" :style="'color:'+upColor" @click="changeColor"></Icon>
+                            <span>{{article.aClick}}</span>
+                            <Icon class="comments" type="md-chatbubbles" style="margin-left: 20px;"></Icon>
+                            <span>{{article.aReview}}</span>
+                            <el-button style="float: right;height: 20px;line-height: 8px" size="mini" @click="showReviewInput" >评论</el-button>
+                        </div>
+                    </el-footer>
+                </el-container>
+
+
+
+            </div>
+            <ReviewInput v-if="canReview" v-on:getReview="getReview"></ReviewInput>
+            <Review></Review>
+        </div>
 
     </div>
+
 </template>
 
 <script>
+    import Navigationbar from "@/components/index/Navigationbar";
+    import axios from "axios"
+    import qs from 'querystring'
+    import Global from "@/components/Global";
+    import ReviewInput from "@/components/article/ReviewInput";
+    import Review from "@/components/article/Review";
     export default {
-        name: "Article"
+        name: "Article",
+        components: {Review, ReviewInput, Navigationbar},
+        data:function(){
+          return{
+              canRead:false,
+              article:{},
+              upColor:"",
+              review:"",
+              canReview:false
+          }
+        },
+        mounted:function () {
+            let path=window.location.href.split("/").splice(-1)[0]
+            console.log(path)
+            axios.post(
+                Global.path+"/getArticleById",
+                qs.stringify({
+                    aId:path
+                })
+            ).then((res)=>{
+                    if(res.data!==""){
+                        this.canRead=true
+
+                    }
+                    else {
+                        this.$router.push("/error")
+                        return
+                    }
+                    this.article=res.data
+
+
+                    if(this.$cookies.get("user")===null)
+                        return null
+                    for (let i = 0; i < this.article.clicks.length; i++) {
+
+                        let id=this.article.clicks[i]["cuserId"]
+                        id=id*id+5*id+10000
+                        if(id===this.$cookies.get("user").uId){
+                            this.upColor="#30d268"
+                        }
+                    }
+
+                })
+
+
+
+
+        },
+        computed:{
+            time:function () {
+                let t=new Date().getTime()
+                t=t-this.article.aTime
+                let day_num=Math.floor(t/(24 * 3600 * 1000))
+                if(day_num>=1){
+                    if(day_num>30){
+                        return new Date(this.article.aTime+ 8 * 3600 * 1000).toJSON().substr(0, 19).replace('T', ' ')
+                    }
+                    return day_num+"天前"
+
+                }
+                let hour=Math.floor(t/(3600*1000))
+                if(hour>=1){
+                    return hour+"小时前"
+                }
+                let minute=Math.floor(t/(60*1000))
+
+                if(minute>=1){
+                    return minute+"分钟前"
+                }
+                return "刚刚"
+            }
+        },
+        methods:{
+            changeColor:function () {
+                if(this.$cookies.get("user")===null){
+                    this.$notify.error("请先登录哦~")
+                    return
+                }
+
+                axios.post(
+                    Global.path+"/like",
+                    qs.stringify({
+                        aId:this.article.aId
+                    })
+                ).then(()=>{
+                    if(this.upColor==="#30d268"){
+                        console.log("取消点赞")
+                        //取消点赞
+                        this.upColor=""
+                        this.article.aClick--
+                    }else {
+                        //点赞
+                        console.log("点赞")
+                        this.upColor="#30d268"
+                        this.article.aClick++
+                    }
+                })
+
+            },
+            getReview:function (text) {
+                this.review=text
+
+            },
+            showReviewInput:function () {
+                if(this.$cookies.get("user")===null){
+                    this.$notify.error({
+                        message:"请先登录哦~"
+                    })
+                    return
+                }
+                this.canReview=!this.canReview
+            }
+        }
     }
 </script>
 
 <style scoped>
 
     .wrap_content {
-        position: relative;
+        position: absolute;
         width: 100%;
-        height: 100%;
-        background: url('../img/blackbord.jpg') no-repeat;
-        background-size: 100%
+        /*height: 100%;*/
+
+        background:#eeeeee;
+    }
+
+    .n1{
+        max-width: 700px;
+        /*height: 300px;*/
+        margin: auto;
+        margin-top: 20px;
+        background:white;
+    }
+
+    .up:hover{
+        cursor: pointer;
+        color: #30d268;
+        transition: all .3s;
+        transform: scale(1.1);
     }
 </style>
