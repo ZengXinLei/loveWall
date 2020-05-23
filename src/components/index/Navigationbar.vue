@@ -2,30 +2,38 @@
 
 
     <div class="wrap" >
-<!--        <el-col :span="22">-->
-<!--            <el-menu class="nav" mode="horizontal" :collapse-transition="true" active-text-color="#F4A7B9"-->
-<!--                     :default-active="page">-->
-<!--                <el-menu-item index="1" @click="click">首页</el-menu-item>-->
-<!--                <el-menu-item index="2" @click="click">表白</el-menu-item>-->
-<!--                <el-menu-item index="3" >无</el-menu-item>-->
-<!--                <el-menu-item index="4" >无</el-menu-item>-->
-<!--            </el-menu>-->
-<!--        </el-col>-->
 
         <el-drawer
                 :visible.sync="drawable"
                 direction="ltr"
                 :with-header="false"
+                size="60%"
+                :modal="false"
+
         >
-                    <el-col :span="22">
-                        <el-menu class="nav"   active-text-color="#F4A7B9"
-                                 :default-active="page">
-                            <el-menu-item index="1" @click="click">首页</el-menu-item>
-                            <el-menu-item index="2" @click="click">表白</el-menu-item>
-                            <el-menu-item index="3" >无</el-menu-item>
-                            <el-menu-item index="4" >无</el-menu-item>
-                        </el-menu>
-                    </el-col>
+
+            <div style="margin-left: 5px;border-top: 10px solid rgb(244, 167, 185);border-bottom: 10px solid rgb(244, 167, 185);height: 100%">
+                <el-menu class="nav"   active-text-color="#F4A7B9"
+                         :default-active="page" >
+                    <el-menu-item index="1" @click="click"><i class="el-icon-discount"></i> 首页</el-menu-item>
+                    <el-menu-item index="2" @click="click"><span style="margin-left: 5px">❤</span><span style="margin-left:13px">表白</span></el-menu-item>
+                    <el-menu-item index="3" >无</el-menu-item>
+                    <el-menu-item index="4" >无</el-menu-item>
+
+<!--                    <el-menu-item v-if="user!==null" index="6" >退出登录</el-menu-item>-->
+                </el-menu>
+                <div style="position: absolute;bottom: 20px;transform: translateX(-50%);left: 50%">
+
+                    <template v-if="user===null">
+
+                        <LoginHead  class="login_wrap"></LoginHead>
+                    </template>
+                    <template v-else>
+                        <el-button @click="out">退出登录</el-button>
+                    </template>
+                </div>
+            </div>
+
         </el-drawer>
             <el-button @click="drawable=true" style="height: 100%;background: none;border:none"><i  class="el-icon-menu" style="transform: scale(1.8);"></i> </el-button>
 
@@ -34,10 +42,7 @@
 
                     <Head :user="user" class="head_wrap" @out="out"></Head>
                 </template>
-                <template v-else>
 
-                    <LoginHead  class="login_wrap"></LoginHead>
-                </template>
             </div>
 
 
@@ -49,6 +54,8 @@
 <script>
     import Head from "@/components/index/Head";
     import LoginHead from "@/components/index/LoginHead";
+    import axios from "axios";
+    import Global from "@/components/Global";
 
     /**
      * @module Navigationbar
@@ -99,6 +106,7 @@
                 else if (event.index==="2"){
                     this.$router.push("/edit")
                 }
+
             },
             /**
              * 滚动条判断
@@ -121,9 +129,20 @@
              * 退出登录
              */
             out:function () {
-                this.user=this.$cookies.get("user")
+                axios.get(Global.path+"/out").then(() => {
+                    this.$message({
+                        message: "已退出登录",
+                        type: "success"
+                    })
+                })
+                this.user=null
+                this.$cookies.remove("user")
+                this.$cookies.remove("isLogin")
+
             }
+
         }
+
 
     }
 </script>

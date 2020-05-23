@@ -1,7 +1,9 @@
 <template>
     <div class="wrap">
         <Navigationbar class="_head" :style="'top:'+headHeight+'px'"></Navigationbar>
-
+        <audio autoplay loop>
+            <source src="../song/p1.mp3" >
+        </audio>
         <div class="wall">
             <div class="left" :style="'width:'+leftLength+';background:'+leftbackgound">
 
@@ -46,20 +48,21 @@
                     <el-input placeholder="昵称(不填为匿名)" v-model="article['aName']"></el-input>
                     <el-input placeholder="意中人" style="margin-top: 10px" v-model="article['aToWho']"></el-input>
                     <Edit style="margin-top: 20px" @input="getValue"></Edit>
-                    <el-button type="warning" size="mini" style="margin-top: 20px" @click="submit">确认</el-button>
+                    <el-button type="success" size="mini" style="margin-top: 20px" @click="submit">确认</el-button>
+                    <el-button type="warning" size="mini" style="margin-top: 20px" @click="drawer=false">关闭</el-button>
                 </el-main>
             </el-container>
         </div>
 
-        <div style="position: absolute;width: 20rem;height: 30rem;bottom: 0px">
-            <el-row id="text" v-for="(tip,index) in tips" :key="index">
-                <el-col :span="24">
-                    <div class="tip">
-                        <span>{{tip.name}}</span><span>❤</span><span>{{tip.who}}</span><span>{{tip.content}}</span><span>❤❤  </span>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+<!--        <div style="position: absolute;width: 20rem;height: 30rem;bottom: 0px">-->
+<!--            <el-row id="text" v-for="(tip,index) in tips" :key="index">-->
+<!--                <el-col :span="24">-->
+<!--                    <div class="tip">-->
+<!--                        <span>{{tip.name}}</span><span>❤</span><span>{{tip.who}}</span><span>{{tip.content}}</span><span>❤❤  </span>-->
+<!--                    </div>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--        </div>-->
 
     </div>
 </template>
@@ -195,8 +198,12 @@
                         'Content-Type': 'application/json'
                     }
                     }
-                ).then((res)=>{
-                    console.log(res.data)
+                ).then(()=>{
+                    this.$notify({
+                        message:"已表白",
+                        type :"success"
+                    })
+                    this.$router.push("/")
                 })
             }
         }
