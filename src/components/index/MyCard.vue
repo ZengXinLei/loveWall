@@ -5,9 +5,9 @@
         <div class="information">
             <img class="head_portrait" :src="article.user.uHeadPortrait">
             <p class="name">{{article.aName}}<span style="color: #EC407A">🌹</span><span>{{article.aToWho}}</span></p>
-            <p class="time">{{new Date(article.aTime+ 8 * 3600 * 1000).toJSON().substr(0, 19).replace('T', ' ')}}</p>
+            <p class="time">{{time}}</p>
             <div class="state">
-                <Icon class="up" type="md-thumbs-up" :style="'color:'+clickColor"></Icon>
+                <Icon class="up" type="md-thumbs-up" :style="'color:'+upColor" @click="changeColor"></Icon>
                 <span>{{article.aClick}}</span>
                 <Icon class="comments" type="md-chatbubbles" ></Icon>
                 <span>{{article.aReview}}</span>
@@ -18,6 +18,9 @@
 </template>
 
 <script>
+    import axios from 'axios'
+    import qs from 'querystring'
+    import Global from "@/components/Global";
     export default {
         name: "MyCard",
         props:{
@@ -26,7 +29,7 @@
         },
         data:function(){
           return{
-              clickColor:""
+              upColor:""
           }
         },
         mounted:function () {
@@ -38,7 +41,7 @@
                 let id=this.article.clicks[i]["cuserId"]
                 id=id*id+5*id+10000
                 if(id===this.$cookies.get("user").uId){
-                    this.clickColor="#30d268"
+                    this.upColor="#30d268"
                 }
             }
         },
@@ -49,15 +52,25 @@
                     return
                 }
 
-                if(this.clickColor==="#30d268"){
-                    //取消点赞
-                    this.clickColor===""
-                    this.article.aClick--
-                }else {
-                    //点赞
-                    this.clickColor==="#30d268"
-                    this.article.aClick++
-                }
+                axios.post(
+                    Global.path+"/like",
+                    qs.stringify({
+                        aId:this.article.aId
+                    })
+                ).then(()=>{
+                    if(this.upColor==="#30d268"){
+                        console.log("取消点赞")
+                        //取消点赞
+                        this.upColor=""
+                        this.article.aClick--
+                    }else {
+                        //点赞
+                        console.log("点赞")
+                        this.upColor="#30d268"
+                        this.article.aClick++
+                    }
+                })
+
             }
         },
         computed:{
@@ -65,6 +78,28 @@
 
                 return this.article.aName==='匿名'?'#5a5f69':'#5DADE2'
             },
+            time:function () {
+                let t=new Date().getTime()
+                t=t-this.article.aTime
+                let day_num=Math.floor(t/(24 * 3600 * 1000))
+                if(day_num>=1){
+                    if(day_num>30){
+                        return new Date(this.article.aTime+ 8 * 3600 * 1000).toJSON().substr(0, 19).replace('T', ' ')
+                    }
+                    return day_num+"天前"
+
+                }
+                let hour=Math.floor(t/(3600*1000))
+                if(hour>=1){
+                    return hour+"小时前"
+                }
+                let minute=Math.floor(t/(60*1000))
+
+                if(minute>=1){
+                    return minute+"分钟前"
+                }
+                return "刚刚"
+            }
 
         }
     }

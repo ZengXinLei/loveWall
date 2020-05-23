@@ -1,31 +1,48 @@
 <template>
 
 
-    <el-row class="wrap" type="flex" align="middle">
-        <el-col :span="22">
-            <el-menu class="nav" mode="horizontal" :collapse-transition="true" active-text-color="#F4A7B9"
-                     :default-active="page">
-                <el-menu-item index="1" @click="click">首页</el-menu-item>
-                <el-menu-item index="2" @click="click">表白</el-menu-item>
-                <el-menu-item index="3" >无</el-menu-item>
-                <el-menu-item index="4" >无</el-menu-item>
-            </el-menu>
-        </el-col>
+    <div class="wrap" >
+<!--        <el-col :span="22">-->
+<!--            <el-menu class="nav" mode="horizontal" :collapse-transition="true" active-text-color="#F4A7B9"-->
+<!--                     :default-active="page">-->
+<!--                <el-menu-item index="1" @click="click">首页</el-menu-item>-->
+<!--                <el-menu-item index="2" @click="click">表白</el-menu-item>-->
+<!--                <el-menu-item index="3" >无</el-menu-item>-->
+<!--                <el-menu-item index="4" >无</el-menu-item>-->
+<!--            </el-menu>-->
+<!--        </el-col>-->
 
-        <el-col class="login" :span="2">
+        <el-drawer
+                :visible.sync="drawable"
+                direction="ltr"
+                :with-header="false"
+        >
+                    <el-col :span="22">
+                        <el-menu class="nav"   active-text-color="#F4A7B9"
+                                 :default-active="page">
+                            <el-menu-item index="1" @click="click">首页</el-menu-item>
+                            <el-menu-item index="2" @click="click">表白</el-menu-item>
+                            <el-menu-item index="3" >无</el-menu-item>
+                            <el-menu-item index="4" >无</el-menu-item>
+                        </el-menu>
+                    </el-col>
+        </el-drawer>
+            <el-button @click="drawable=true" style="height: 100%;background: none;border:none"><i  class="el-icon-menu" style="transform: scale(1.8);"></i> </el-button>
 
-            <template v-if="user!==null">
+            <div style="float: right;margin-right: 1rem">
+                <template v-if="user!==null">
 
-                <Head :user="user" class="head_wrap" @out="out"></Head>
-            </template>
-            <template v-else>
+                    <Head :user="user" class="head_wrap" @out="out"></Head>
+                </template>
+                <template v-else>
 
-                <LoginHead  class="login_wrap"></LoginHead>
-            </template>
+                    <LoginHead  class="login_wrap"></LoginHead>
+                </template>
+            </div>
 
 
-        </el-col>
-    </el-row>
+
+    </div>
     <!--    </el-row>-->
 </template>
 
@@ -43,7 +60,8 @@
         data: function () {
             return {
                 user:this.$cookies.get("user"),
-                page:"1"
+                page:"1",
+                drawable:false
             }
         },
 
@@ -111,29 +129,18 @@
 </script>
 
 <style scoped>
-    .href{
-        width:100%;
-        height: 100%;
-    }
-    .el-menu-item:hover{
-        background: rgba(255,255,255,0.5) !important;
-    }
-    a {
-        color: #606266;
-    }
 
-    .el-button{
-        letter-spacing: 3px;
-        background: none;
-        border: none;
-        color: white;
-        font-weight: bold;
+
+
+    .el-icon-menu{
+        color:white;
     }
-
-    /*.el-button:hover {*/
-    /*    color: #F4A7B9;*/
-    /*}*/
-
+    .el-icon-menu:hover{
+        color: #fb8489;
+    }
+    .el-button:hover{
+        color: #fb8489;
+    }
     .wrap {
         z-index: 3;
         width: 100%;
@@ -144,17 +151,6 @@
         transition: all .5s;
     }
 
-    .el-menu {
-        /*width: 100%;*/
-        background: rgba(0, 0, 0, 0);
-        border-bottom: none;
-
-    }
-
-    .el-menu-item {
-        color: #D5D8DC;
-        font-weight: bold;
-    }
 
 
 </style>

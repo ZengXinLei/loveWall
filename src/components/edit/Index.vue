@@ -52,7 +52,7 @@
         </div>
 
         <div style="position: absolute;width: 20rem;height: 30rem;bottom: 0px">
-            <el-row v-for="(tip,index) in tips" :key="index">
+            <el-row id="text" v-for="(tip,index) in tips" :key="index">
                 <el-col :span="24">
                     <div class="tip">
                         <span>{{tip.name}}</span><span>❤</span><span>{{tip.who}}</span><span>{{tip.content}}</span><span>❤❤  </span>
@@ -205,7 +205,7 @@
 
 <style scoped>
 
-    .el-row {
+    #text {
         padding: 0;
         height: 30px;
         margin-top: 15px;

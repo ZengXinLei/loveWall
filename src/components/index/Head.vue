@@ -97,6 +97,9 @@
         box-shadow: 0 2px 5px #CCD1D1;
     }
 
+    .menu:hover .menu{
+        display: block;
+    }
     .menu-item {
         height: 40px;
         line-height: 40px;
@@ -115,5 +118,8 @@
         color: #F4A7B9;
     }
 
+    .menu-item:hover .menu{
+        display: block;
+    }
 
 </style>
