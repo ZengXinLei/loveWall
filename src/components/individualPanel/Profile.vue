@@ -1,29 +1,59 @@
 <template>
 
-    <el-container class="top_wrap">
-        <el-header>
-            <Navigationbar ></Navigationbar>
-        </el-header>
-        <el-main >
+    <div>
+        <div v-if="isError">
+            <el-container class="top_wrap">
+                <el-header>
+                    <Navigationbar ></Navigationbar>
+                </el-header>
+                <el-main >
 
                     <el-tabs tab-position="left">
-                        <el-tab-pane label="个人资料"><Info></Info></el-tab-pane>
+                        <el-tab-pane label="个人资料"><Info :u1="u"></Info></el-tab-pane>
 
-                        <el-tab-pane label="我的表白之路">定时任务补偿</el-tab-pane>
+                        <el-tab-pane label="我的表白之路"><ArticleList :u="u"></ArticleList></el-tab-pane>
                     </el-tabs>
 
-        </el-main>
-    </el-container>
+                </el-main>
+            </el-container>
+        </div>
+
+    </div>
 </template>
 
 <script>
     import Navigationbar from "@/components/index/Navigationbar";
     import Info from "@/components/individualPanel/Info";
+    import ArticleList from "@/components/individualPanel/ArticleList";
+    import axios from "axios";
+    import qs from 'querystring'
+    import Global from "@/components/Global";
     export default {
         name: "profile",
-        components: {Info, Navigationbar},
+        components: { ArticleList, Info, Navigationbar},
+        data:function(){
+            return{
+                isError:false,
+                u:{}
+            }
+        },
         mounted:function () {
+            let uId=window.location.href.split("/").splice(-1)[0]
+            axios.post(
+                Global.path+"/isUserById",
+                qs.stringify({
+                    uId:uId
+                })
+            ).then((res)=>{
+                if(res.data!==""){
 
+                    this.isError=true
+                    this.u=res.data
+                }
+                else {
+                    this.$router.push("/error")
+                }
+            })
         }
     }
 </script>

@@ -78,7 +78,6 @@
         mounted:function() {
 
             let path=window.location.href.split("/").splice(-1)[0]
-            console.log(path+"路径")
             let arr=["","edit"]
             for (let i = 0; i < arr.length; i++) {
 

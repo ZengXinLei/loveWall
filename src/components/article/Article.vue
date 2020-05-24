@@ -5,7 +5,7 @@
             <div class="n1">
                 <el-container>
                     <el-header style="border-bottom: 1px solid rgb(227, 227, 227)">
-                        <img style="border-radius: 50%;width: 50px;height:50px;margin-top: 5px;float: left"  :src="article['user']['uHeadPortrait']">
+                        <img @click="goUser" class="head_img" style="border-radius: 50%;width: 50px;height:50px;margin-top: 5px;float: left"  :src="article['user']['uHeadPortrait']">
                         <div style="float: left;margin: 10px">
                             <h2 style="float: left;">🌹</h2>
                             <h4 style="float: left;margin-top: 5px;margin-left: 10px">{{article["aToWho"]}}</h4>
@@ -29,7 +29,7 @@
 
             </div>
             <ReviewInput v-if="canReview" v-on:getReview="getReviewandSend"></ReviewInput>
-            <Review v-for="(r,index) in article['reviews']" :key="index" :review="r" :floor="index"></Review>
+            <Review v-for="(r,index) in article['reviews']" :key="index" :review="r" :floor="index" @deleteReview="removeReview"></Review>
         </div>
 
     </div>
@@ -58,7 +58,6 @@
         },
         mounted:function () {
             let path=window.location.href.split("/").splice(-1)[0]
-            console.log(path)
             axios.post(
                 Global.path+"/getArticleById",
                 qs.stringify({
@@ -112,13 +111,11 @@
                     })
                 ).then(()=>{
                     if(this.upColor==="#30d268"){
-                        console.log("取消点赞")
                         //取消点赞
                         this.upColor=""
                         this.article.aClick--
                     }else {
                         //点赞
-                        console.log("点赞")
                         this.upColor="#30d268"
                         this.article.aClick++
                     }
@@ -165,6 +162,23 @@
                     return
                 }
                 this.canReview=!this.canReview
+            },
+            //删除评论
+            removeReview:function (index,rId) {
+                axios.post(
+                    Global.path+"/deleteReview",
+                    qs.stringify({
+                        rId:rId
+                    })
+                ).then(()=>{
+                    this.article.reviews.splice(index,1)
+                    this.article.aReview-=1
+                })
+
+
+            },
+            goUser:function () {
+                this.$router.push("/profile/"+this.article.user.uId)
             }
         }
     }
@@ -172,6 +186,13 @@
 
 <style scoped>
 
+    .head_img{
+        cursor: pointer;
+        transition: .5s all;
+    }
+    .head_img:hover{
+        transform: scale(1.1);
+    }
     .wrap_content {
         position: absolute;
         width: 100%;

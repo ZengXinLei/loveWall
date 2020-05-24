@@ -28,7 +28,7 @@
         },
         methods:{
             toProfile:function () {
-                this.$router.push("/profile")
+                this.$router.push("/profile/"+this.$cookies.get("user").uId)
             }
         }
     }

@@ -7,7 +7,7 @@
             <p class="name">{{article.aName}}<span style="color: #EC407A">🌹</span><span>{{article.aToWho}}</span></p>
             <p class="time">{{time}}</p>
             <div class="state">
-                <Icon class="up" type="md-thumbs-up" :style="'color:'+upColor" @click="changeColor"></Icon>
+                <Icon class="up" type="md-thumbs-up" :style="'color:'+upColor" @click.stop="changeColor"></Icon>
                 <span>{{article.aClick}}</span>
                 <Icon class="comments" type="md-chatbubbles" ></Icon>
                 <span>{{article.aReview}}</span>
@@ -60,13 +60,11 @@
                     })
                 ).then(()=>{
                     if(this.upColor==="#30d268"){
-                        console.log("取消点赞")
                         //取消点赞
                         this.upColor=""
                         this.article.aClick--
                     }else {
                         //点赞
-                        console.log("点赞")
                         this.upColor="#30d268"
                         this.article.aClick++
                     }

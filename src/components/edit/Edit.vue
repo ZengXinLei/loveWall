@@ -65,7 +65,6 @@
         methods:{
             change:function () {
 
-                console.log("e")
             }
         }
     }

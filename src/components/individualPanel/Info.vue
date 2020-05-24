@@ -10,18 +10,18 @@
                 <el-aside width="110">
                     <el-avatar :size="100" :src="u.uHeadPortrait"></el-avatar>
                     <br>
-                    <el-button type="warning" size="small" style="margin-left: 11px;" @click="isChangeImg=true">修改头像</el-button>
+                    <el-button v-if="Permissions===1" type="warning" size="small" style="margin-left: 11px;" @click="isChangeImg=true">修改头像</el-button>
                 </el-aside>
                 <el-main style="height: 600px">
                     <div>
-                        <span>ID:100000</span>
+                        <span>ID:{{u.uId}}</span>
                         <a style="float: right">表白之路></a>
                     </div>
 
                     <div style="margin-top: 15px">
-                        <span style="margin-right: 6px">关注 {{u.uAttention}}</span>
-                        <span style="margin-right: 6px">|</span>
-                        <span style="margin-right: 6px">粉丝 {{u.uFans}}</span>
+<!--                        <span style="margin-right: 6px">关注 {{u.uAttention}}</span>-->
+<!--                        <span style="margin-right: 6px">|</span>-->
+<!--                        <span style="margin-right: 6px">粉丝 {{u.uFans}}</span>-->
                     </div>
                     <div style="margin-top: 10px">
                         <el-button size="mini" type="danger" @click="qrCode=true">捐赠</el-button>
@@ -36,7 +36,7 @@
                             <div style="margin-top: 10px">
                                 <span>昵称: </span>
                                 <span>{{u.uName}}</span>
-                                <el-button type="success" size="mini" round style="float: right" @click="isChangePanel=true">修改资料</el-button>
+                                <el-button v-if="Permissions===1" type="success" size="mini" round style="float: right" @click="isChangePanel=true">修改资料</el-button>
                             </div>
                             <ul class="wrap_li">
 
@@ -44,7 +44,7 @@
                                 <li><span>破壳日:</span><span>{{u.uBirth==="0"?"":u.uBirth}}</span></li>
                                 <li><span>信仰:</span><span>{{u.uFaith==="无"?"":u.uFaith}}</span></li>
                                 <li><span>女神:</span><span>{{u.uLover==="无"?"":u.uLover}}</span></li>
-
+                                <li><span>允许他人查看我:<span>{{u.uPublic?"是":"否"}}</span></span></li>
                             </ul>
                         </template>
                         <template v-else>
@@ -55,6 +55,11 @@
                                                                     value-format="yyyy-MM-dd"></el-date-picker></li>
                                 <li><span>信仰:</span><el-input v-model="user.uFaith"></el-input><span >{{user.uName.uFaith}}/30</span></li>
                                 <li><span>女神:</span><el-input v-model="user.uLover"></el-input><span >{{user.uName.uLover}}/5</span></li>
+                                <li><el-switch
+                                        v-model="isPublic"
+                                        active-text="允许他人访问"
+                                        inactive-text="拒绝他人访问">
+                                </el-switch></li>
                                 <el-row  style="margin-top: 40px">
                                     <el-col :span="4" :offset="1" >
                                         <el-button type="info" @click="isChangePanel=false">取消</el-button>
@@ -98,6 +103,8 @@
                 isChangePanel:false,
                 isChangeImg:false,
                 url:"",
+                Permissions:0,
+                isPublic:this.$cookies.get("user").uPublic,
                 user:{
                     uName:"",
                     uSex:"",
@@ -105,11 +112,21 @@
                     uFaith:"",
                     uLover:""
                 },
-                u:this.$cookies.get("user")
+                u:{}
             }
         },
+        props:["u1"],
         mounted:function(){
+            this.u=this.u1
+            let user=this.$cookies.get("user")
 
+            if(user!==null){
+
+
+                if(user.uId===this.u.uId){
+                    this.Permissions=1
+                }
+            }
         },
         methods:{
             affirm:function () {
@@ -155,7 +172,7 @@
                 if(this.user.uLover!==""){
                     user["uLover"]=this.user.uLover
                 }
-
+                user["uPublic"]=this.isPublic?1:0
                 axios.post(
                     Global.path+"/updataInfo",
                     user

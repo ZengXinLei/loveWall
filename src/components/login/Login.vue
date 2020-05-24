@@ -96,6 +96,7 @@
     // eslint-disable-next-line no-unused-vars
     import Profile from "@/components/individualPanel/Profile";
     import Router from "@/components/Router";
+    import Time from "@/js/Time";
 
     /**
      * 登录页面
@@ -165,16 +166,12 @@
                     } else {
                         //全局设置用户
                         this.$cookies.set("user",res.data,"1d")
-                        let date=new Date(res.data.uLoginTime+ 8 * 3600 * 1000)
-                        date=date.toJSON().substr(0, 19).replace('T', ' ')
-                        this.$message.success("小主，欢迎回来~,您上次于"+date+"来过呢")
+                        this.$message.success("小主，欢迎回来~,您"+Time.getTime(res.data.rLoginTime)+"来过呢")
                         //重新设置路由
                         Router.addRouter(this)
                         this.$router.push("/")
                     }
 
-                }).catch((err) => {
-                    console.log(err)
                 })
             },
             sign:function () {
@@ -183,14 +180,14 @@
                 this.telTip=""
                 this.repeatTip=""
                 this.codeTip=""
-                let uNamePattern=/^[a-zA-Z0-9\u4e00-\u9fa5_-]{3,10}$/
+                let uNamePattern=/^[\u4e00-\u9fa5]{3,10}$/
 
                 if (this.uName.length===0){
                     this.userTip="用户名不能为空"
                     return
                 }
                 if(!uNamePattern.test(this.uName)){
-                    this.userTip="长度必须在3-10个字符之间，只能为字母，汉字，数字，_,-"
+                    this.userTip="长度必须在3-10个字符之间，只能为汉字"
                     return;
                 }
                 if (this.uPassword.length===0){
@@ -202,7 +199,6 @@
                     return;
                 }
                 if(this.repeatword!==this.uPassword){
-                    console.log(this.repeatword,this.uPassword)
                     this.repeatTip="两次密码不一致"
                     return;
                 }

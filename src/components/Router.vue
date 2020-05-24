@@ -30,10 +30,10 @@
             }
         },
         {
-            path: "/profile",
+            path: "/profile/*",
             component: Profile,
             meta: {
-                rule: 1
+                rule: 0
             }
         },
         {
@@ -72,7 +72,6 @@
                 }
             }
         }else {
-            console.log("未登录")
             for (let i = 0; i <routes.length ; i++) {
                 if(routes[i].meta.rule===0){
                     arr.push(routes[i])
@@ -84,8 +83,7 @@
             context.$router.options.routes.push(arr[i])
         }
         context.$router.addRoutes(context.$router.options.routes)
-        // console.log(arr)
-        // console.log(context.$router)
+
     }
 
 
