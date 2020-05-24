@@ -26,6 +26,7 @@
             input:function () {
                 this.$emit("getReview",this.text)
             }
+
         }
     }
 </script>

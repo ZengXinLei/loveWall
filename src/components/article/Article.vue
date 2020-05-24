@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 100%;">
+    <div >
         <div v-if="canRead" class="wrap_content" >
             <Navigationbar></Navigationbar>
             <div class="n1">
@@ -28,7 +28,7 @@
 
 
             </div>
-            <ReviewInput v-if="canReview" v-on:getReview="getReview"></ReviewInput>
+            <ReviewInput v-if="canReview" v-on:getReview="getReviewandSend"></ReviewInput>
             <Review></Review>
         </div>
 
@@ -51,7 +51,7 @@
               canRead:false,
               article:{},
               upColor:"",
-              review:"",
+              review:{},
               canReview:false
           }
         },
@@ -143,8 +143,34 @@
                 })
 
             },
-            getReview:function (text) {
-                this.review=text
+            //发送评论
+            getReviewandSend:function (text) {
+                if(text===""||text===null){
+                    this.$notify.error({
+                        message:"内容不能为空~"
+                    })
+                    return
+                }
+                this.review["rText"]=text
+                this.review["rTime"]=new Date().getTime()
+                this.review["rArticleId"]=this.article["aId"]
+                axios.post(
+                    Global.path+"/review",
+                    this.review,
+                    {
+                        headers:{
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                ).then(()=>{
+
+                    this.canReview=false
+                    this.$notify({
+                        message:"评论成功!",
+                        type:"success"
+                    })
+                })
+
 
             },
             showReviewInput:function () {
@@ -165,7 +191,7 @@
     .wrap_content {
         position: absolute;
         width: 100%;
-        /*height: 100%;*/
+        min-height: 100%;
 
         background:#eeeeee;
     }
