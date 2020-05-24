@@ -5,7 +5,7 @@
             <div class="n1">
                 <el-container>
                     <el-header style="border-bottom: 1px solid rgb(227, 227, 227)">
-                        <img style="border-radius: 50%;max-width: 50px;margin-top: 5px;float: left"  :src="article['user']['uHeadPortrait']">
+                        <img style="border-radius: 50%;width: 50px;height:50px;margin-top: 5px;float: left"  :src="article['user']['uHeadPortrait']">
                         <div style="float: left;margin: 10px">
                             <h2 style="float: left;">🌹</h2>
                             <h4 style="float: left;margin-top: 5px;margin-left: 10px">{{article["aToWho"]}}</h4>
@@ -29,7 +29,7 @@
 
             </div>
             <ReviewInput v-if="canReview" v-on:getReview="getReviewandSend"></ReviewInput>
-            <Review></Review>
+            <Review v-for="(r,index) in article['reviews']" :key="index" :review="r" :floor="index"></Review>
         </div>
 
     </div>
@@ -43,6 +43,7 @@
     import Global from "@/components/Global";
     import ReviewInput from "@/components/article/ReviewInput";
     import Review from "@/components/article/Review";
+    import Time from "@/js/Time";
     export default {
         name: "Article",
         components: {Review, ReviewInput, Navigationbar},
@@ -94,26 +95,7 @@
         },
         computed:{
             time:function () {
-                let t=new Date().getTime()
-                t=t-this.article.aTime
-                let day_num=Math.floor(t/(24 * 3600 * 1000))
-                if(day_num>=1){
-                    if(day_num>30){
-                        return new Date(this.article.aTime+ 8 * 3600 * 1000).toJSON().substr(0, 19).replace('T', ' ')
-                    }
-                    return day_num+"天前"
-
-                }
-                let hour=Math.floor(t/(3600*1000))
-                if(hour>=1){
-                    return hour+"小时前"
-                }
-                let minute=Math.floor(t/(60*1000))
-
-                if(minute>=1){
-                    return minute+"分钟前"
-                }
-                return "刚刚"
+                return Time.getTime(this.article.aTime)
             }
         },
         methods:{
@@ -162,13 +144,15 @@
                             'Content-Type': 'application/json'
                         }
                     }
-                ).then(()=>{
-
+                ).then((res)=>{
+                    this.article["reviews"].push(res.data)
+                    // console.log(res.data)
                     this.canReview=false
                     this.$notify({
                         message:"评论成功!",
                         type:"success"
                     })
+                    this.article.aReview+=1
                 })
 
 
