@@ -21,16 +21,15 @@ Vue.use(ElementUI);
 Vue.use(ViewUI)
 
 let routes = []
-
-
-
-
+console.log("%c github 地址： %chttps://github.com/ZengXinLei/loveWall", "color:red","color:#009688;font-weight:bold")
+console.log("%c 因为要做毕设， %c所以先搁浅一段时间", "color:red","color:#009688;font-weight:bold")
+console.log("%c 交流群 %c 894742938 %c 卑微的站长", "color:red","","color:orange;font-weight:bold")
+console.log("%c ", "background: url('https://s1.ax1x.com/2020/05/25/t9ZPN6.png') no-repeat center;background-size:100% 100%;padding-left:80px;padding-bottom: 80px;")
 
 const router = new VueRouter({
     mode: "history",
     routes
 })
-
 
 new Vue({
     el: '#app',

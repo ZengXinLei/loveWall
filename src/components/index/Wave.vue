@@ -8,7 +8,7 @@
 
     // eslint-disable-next-line no-unused-vars
     // import {addresize,  run} from "@/components/wave1";
-    import i from '../img/blackbord.jpg'
+    // import i from 'https://s1.ax1x.com/2020/05/25/t9Cmx1.jpg'
     export default {
         name: "Wave",
         mounted() {
@@ -18,7 +18,7 @@
             let w = c.width = window.innerWidth;
             let h = c.height = window.innerHeight;
             let img=new Image()
-            img.src=i
+            img.src='https://s1.ax1x.com/2020/05/25/t9Cmx1.jpg'
             let pat=$.createPattern(img,'repeat-y')
             img.onload=function () {
                 pat=$.createPattern(img,'repeat-y')

@@ -12,7 +12,7 @@
                         <h3 style="float: left">{{article["aName"]}}</h3>
                         <h5 style="float: left">🌹</h5>
                         <h3 style="float: left">{{article["aToWho"]}}</h3>
-                        <i @click="remove(article)" class="el-icon-delete" style="float: right"></i>
+                        <i v-if="canremove" @click.stop="remove(article)" class="el-icon-delete" style="float: right"></i>
                     </div>
                     <br>
                     <div style="position: absolute;left: 0;top: 30px">
@@ -41,11 +41,20 @@
                 start:0,
                 offset:10,
                 loading:true,
-                disable:false
+                disable:false,
+                canremove:true
             }
         },
         mounted: function () {
-
+            let user=this.$cookies.get("user")
+            if(user===null){
+                this.canremove=false
+            }
+            else {
+                if(user.uId!==this.u.uId){
+                    this.canremove=false
+                }
+            }
             axios.post(
                 Global.path + "/getArticlesByUserId",
                 qs.stringify({

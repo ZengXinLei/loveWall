@@ -2,7 +2,7 @@
     <div class="wrap">
         <Navigationbar class="_head" :style="'top:'+headHeight+'px'"></Navigationbar>
         <audio autoplay loop>
-            <source src="../song/p1.mp3" >
+            <source src="http://music.163.com/song/media/outer/url?id=1409329655.mp3" >
         </audio>
         <div class="wall">
             <div class="left" :style="'width:'+leftLength+';background:'+leftbackgound">
@@ -189,7 +189,7 @@
                     })
                     return;
                 }
-                console.log(article)
+                // console.log(article)
                 axios.post(
                     Global.path+"/insertArticle",
                     article,

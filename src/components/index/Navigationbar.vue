@@ -163,7 +163,7 @@
         z-index: 3;
         width: 100%;
         height: 60px;
-        background: url("../img/nav.png") no-repeat;
+        background: url("https://s1.ax1x.com/2020/05/25/t9Cczn.png") no-repeat;
         background-size: 100%;
         box-shadow: 0 4px 30px rgb(176, 147, 120);
         transition: all .5s;

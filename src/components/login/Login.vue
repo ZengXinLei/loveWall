@@ -174,6 +174,7 @@
 
                 })
             },
+
             sign:function () {
                 this.userTip=""
                 this.passwordTip=""
@@ -430,7 +431,7 @@
 
     #bg {
         position: fixed;
-        background: url("../img/blackbord.jpg");
+        background: url("https://s1.ax1x.com/2020/05/25/t9Cmx1.jpg");
         height: 100%;
         width: 100%;
     }

@@ -8,7 +8,7 @@
 
             <el-container >
                 <el-aside width="110">
-                    <el-avatar :size="100" :src="u.uHeadPortrait"></el-avatar>
+                    <el-avatar :size="100" :src="u['uHeadPortrait']"></el-avatar>
                     <br>
                     <el-button v-if="Permissions===1" type="warning" size="small" style="margin-left: 11px;" @click="isChangeImg=true">修改头像</el-button>
                 </el-aside>
@@ -40,7 +40,7 @@
                             </div>
                             <ul class="wrap_li">
 
-                                <li><span>性别:</span>{{u.uSex=="无"?"":u.uSex}}<span></span></li>
+                                <li><span>性别:</span>{{u.uSex==="无"?"":u.uSex}}<span></span></li>
                                 <li><span>破壳日:</span><span>{{u.uBirth==="0"?"":u.uBirth}}</span></li>
                                 <li><span>信仰:</span><span>{{u.uFaith==="无"?"":u.uFaith}}</span></li>
                                 <li><span>女神:</span><span>{{u.uLover==="无"?"":u.uLover}}</span></li>
@@ -76,7 +76,7 @@
             </el-container>
         </el-main>
         <el-dialog width="350px" :center="true" :visible.sync="qrCode">
-            <img width="300px" height="400px" src="../img/qr.png">
+            <img width="300px" height="400px" src="https://s1.ax1x.com/2020/05/25/t9C0Z8.png">
         </el-dialog>
         <el-dialog :center="true" :visible.sync="isChangeImg">
             <el-input v-model="url" placeholder="头像链接如:https://s2.ax1x.com/2019/12/06/QY0hQ0.png"></el-input>
@@ -96,6 +96,8 @@
     import qs from "querystring"
     export default {
         name: "Info",
+        component: {},
+        props:["u"],
         data:function () {
             return{
                 src:"https://s1.ax1x.com/2020/05/19/YIKHwn.jpg",
@@ -104,26 +106,27 @@
                 isChangeImg:false,
                 url:"",
                 Permissions:0,
-                isPublic:this.$cookies.get("user").uPublic,
+                isPublic:false,
                 user:{
                     uName:"",
                     uSex:"",
                     uBirth:"",
                     uFaith:"",
                     uLover:""
-                },
-                u:{}
+                }
             }
         },
-        props:["u1"],
+
         mounted:function(){
-            this.u=this.u1
+
+            this.isPublic=this.u.uPublic
             let user=this.$cookies.get("user")
 
             if(user!==null){
 
 
                 if(user.uId===this.u.uId){
+                    this.isPublic=this.u.uPublic
                     this.Permissions=1
                 }
             }
@@ -188,7 +191,7 @@
                         this.$message.success("更改成功")
                         this.$cookies.set("user",res.data,"1d")
 
-                        this.u=res.data
+                        this.$emit("update",res.data)
                         this.isChangePanel=false
                     }
                 })
@@ -217,6 +220,7 @@
 
                 })
                 this.isChangeImg=false
+
             }
         }
 

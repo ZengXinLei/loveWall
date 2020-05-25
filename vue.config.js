@@ -5,7 +5,7 @@ module.exports={
         port:80,
         proxy:{
             '/api/':{
-                target:"http://miluyiguan:8080/",
+                target:"http://localhost:8088/",
                 changeOrigin: true,
                 ws:true,
                 pathRewrite: {

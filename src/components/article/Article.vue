@@ -178,7 +178,22 @@
 
             },
             goUser:function () {
-                this.$router.push("/profile/"+this.article.user.uId)
+
+                axios.post(
+                    Global.path+"/isUserById",
+                    qs.stringify({
+                        uId:this.article.user.uId
+                    })
+                ).then((res)=>{
+                    if(res.data===""){
+                        this.$notify.error({
+                            message:"该用户设置了隐私权限"
+                        })
+                    }else {
+                        this.$router.push("/profile/"+this.article.user.uId)
+                    }
+                })
+
             }
         }
     }

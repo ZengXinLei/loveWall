@@ -1,6 +1,6 @@
 <template>
     <el-container class="wrap">
-        <div><aside><img src="./img/Mirror.png" alt="404 Image" />
+        <div><aside><img src="https://s1.ax1x.com/2020/05/25/t9C6Rs.png" alt="404 Image" />
         </aside>
             <main>
                 <h1>Sorry!</h1>
@@ -69,7 +69,7 @@
     }
 
     aside {
-        background-image: url("./img/right-edges.png");
+        background-image: url("https://s1.ax1x.com/2020/05/25/t9CsiQ.png");
         background-position: top right;
         background-repeat: no-repeat;
         background-size: 25px 100%;

@@ -37,6 +37,9 @@
 <script>
     // eslint-disable-next-line no-unused-vars
     import Time from "@/js/Time";
+    import axios from "axios";
+    import Global from "@/components/Global";
+    import qs from "querystring";
     // import ReviewInput from "@/components/article/ReviewInput";
     export default {
         name: "Review",
@@ -71,7 +74,20 @@
                 this.$emit("deleteReview", this.floor, this.review.rId)
             },
             goUser: function () {
-                this.$router.push("/profile/"+this.review.user.uId)
+                axios.post(
+                    Global.path+"/isUserById",
+                    qs.stringify({
+                        uId:this.review.user.uId
+                    })
+                ).then((res)=>{
+                    if(res.data===""){
+                        this.$notify.error({
+                            message:"该用户设置了隐私权限"
+                        })
+                    }else {
+                        this.$router.push("/profile/"+this.review.user.uId)
+                    }
+                })
             }
         }
     }

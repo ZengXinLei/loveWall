@@ -9,7 +9,7 @@
                 <el-main >
 
                     <el-tabs tab-position="left">
-                        <el-tab-pane label="个人资料"><Info :u1="u"></Info></el-tab-pane>
+                        <el-tab-pane label="个人资料"><Info @update="update" :u="u"></Info></el-tab-pane>
 
                         <el-tab-pane label="我的表白之路"><ArticleList :u="u"></ArticleList></el-tab-pane>
                     </el-tabs>
@@ -46,7 +46,6 @@
                 })
             ).then((res)=>{
                 if(res.data!==""){
-
                     this.isError=true
                     this.u=res.data
                 }
@@ -54,6 +53,11 @@
                     this.$router.push("/error")
                 }
             })
+        },
+        methods:{
+            update:function (t) {
+                this.u=t
+            }
         }
     }
 </script>
@@ -64,7 +68,7 @@
 
         width: 100%;
         height: 100%;
-        background: url("../img/blackbord.jpg") no-repeat;
+        background: url("https://s1.ax1x.com/2020/05/25/t9Cmx1.jpg") no-repeat;
         background-size: 100% 100%;
     }
     .el-tab-pane{
